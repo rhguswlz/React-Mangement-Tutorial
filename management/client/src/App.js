@@ -9,18 +9,6 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { Component } from 'react';
 
-const styles = theme => ({
-  root: {
-    width:'100%',
-    marginTop: theme.spacing.unit *3,
-    overflowX: "auto"
-  },
-  table:{
-    minWidth:1080
-  }
-});
-
-
 class App extends Component{
   state = {
     customers: ""
@@ -38,9 +26,10 @@ class App extends Component{
     return body;
   }
   render(){
+    const {classes} = this.props;
     return (
-      <Paper>
-        <Table>
+      <Paper sx={{overflowX: "auto"}}>
+        <Table stickyHeader sx={{maxWidth: '1080px', minWidth: '1080px'}}>
           <TableHead>
             <TableRow>
               <TableCell>번호</TableCell>
