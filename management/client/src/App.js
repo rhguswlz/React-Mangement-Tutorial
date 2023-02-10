@@ -7,14 +7,17 @@ import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import CircularProgress  from '@mui/material/CircularProgress';
 import { Component } from 'react';
 
 class App extends Component{
   state = {
-    customers: ""
+    customers: "",
+    completed: 0
   }
 
   componentDidMount(){
+    this.timer = setInterval(this.progress, 20); // 0.02초마다 progress 함수 실행
     this.callApi()
       .then(res => this.setState({customers:res}))
       .catch(err =>console.log(err));
@@ -25,6 +28,11 @@ class App extends Component{
     const body  = await response.json();
     return body;
   }
+  progress = () => {
+    const {completed} = this.state;
+    this.setState({completed: completed >= 100 ? 0 : completed + 1});
+  }
+
   render(){
     const {classes} = this.props;
     return (
@@ -43,7 +51,13 @@ class App extends Component{
           <TableBody>
             {this.state.customers ? this.state.customers.map(c =>{
               return(<Customer key={c.id} id={c.id} iamge={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job}/> );
-            }): ""}
+            }): 
+            <TableRow>
+              <TableCell colSpan="6" align = "center">
+                <CircularProgress value={this.state.completed}/>
+              </TableCell>
+            </TableRow>
+            }
           </TableBody>
         </Table>
       </Paper>
