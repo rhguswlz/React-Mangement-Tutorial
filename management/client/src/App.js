@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Customer from './components/Customers';
 import Paper from '@mui/material/Paper'
@@ -34,7 +33,6 @@ class App extends Component{
   }
 
   render(){
-    const {classes} = this.props;
     return (
       <Paper sx={{overflowX: "auto"}}>
         <Table stickyHeader sx={{maxWidth: '1080px', minWidth: '1080px'}}>
