@@ -1,5 +1,6 @@
 import './App.css';
 import Customer from './components/Customers';
+import CustomerAdd from './components/CustomerAdd';
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -10,9 +11,23 @@ import CircularProgress  from '@mui/material/CircularProgress';
 import { Component } from 'react';
 
 class App extends Component{
-  state = {
-    customers: "",
-    completed: 0
+
+  constructor(props){
+    super(props);
+    this.state = {
+      customers: '',
+      completed: 0
+    }
+  }
+  stateRefresh= () => {
+    this.setState({
+      customers:'',
+      completed: 0
+    });
+    this.callApi()
+    .then(res => this.setState({customers:res}))
+    .catch(err =>console.log(err));
+    
   }
 
   componentDidMount(){
@@ -34,6 +49,7 @@ class App extends Component{
 
   render(){
     return (
+    <div>
       <Paper sx={{overflowX: "auto"}}>
         <Table stickyHeader sx={{maxWidth: '1080px', minWidth: '1080px'}}>
           <TableHead>
@@ -59,6 +75,8 @@ class App extends Component{
           </TableBody>
         </Table>
       </Paper>
+      <CustomerAdd stateRefresh={this.stateRefresh}/>
+    </div>
     );
   }
 }
