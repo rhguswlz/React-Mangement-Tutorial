@@ -29,7 +29,7 @@ const upload = multer({dest: './upload'});
 
 app.get('/api/customers',(req,res)=>{
     connection.query (
-        "SELECT * FROM CUSTOMER",
+        "SELECT * FROM CUSTOMER WHERE isDeleted =0",
         (err, rows, fields) => {
             res.send(rows);
         }
@@ -41,7 +41,7 @@ app.use('/image',express.static('./upload'));
 //upload.single -> API에 image변수에 넣어있는 바이너리 값을 받아옴
 //filename은 multer가 중복되지않게 해줌
 app.post('/api/customers',upload.single('image'),(req,res)=>{
-    let sql = 'INSERT INTO CUSTOMER VALUES (null, ?,?,?,?,?)';
+    let sql = 'INSERT INTO CUSTOMER VALUES (null, ?,?,?,?,?,now(),0)';
     let image = '/image/' +req.file.filename;
     let name = req.body.name;
     let birthday = req.body.birthday;
@@ -55,5 +55,16 @@ app.post('/api/customers',upload.single('image'),(req,res)=>{
         }
     );
 });
+
+app.delete('/api/customers/:id',(req,res)=>{
+    let sql = 'UPDATE CUSTOMER SET isDeleted = 1 WHERE id = ?';
+    let params = [req.params.id];
+    connection.query(sql,params,
+        (err,rows,fields) =>{
+            res.send(rows);
+        }
+    )
+
+})
 
 app.listen(port,()=> console.log(`Listening on port ${port}`));
